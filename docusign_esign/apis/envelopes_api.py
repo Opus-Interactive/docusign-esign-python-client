@@ -10487,7 +10487,7 @@ class EnvelopesApi(object):
                  returns the request thread.
         """
 
-        all_params = ['account_id', 'document_id', 'envelope_id']
+        all_params = ['account_id', 'document_id', 'envelope_id', 'document', 'filename']
         all_params.append('callback')
         all_params.append('_return_http_data_only')
         all_params.append('_preload_content')
@@ -10532,9 +10532,15 @@ class EnvelopesApi(object):
         local_var_files = {}
 
         body_params = None
+        if 'document' in params:
+            body_params = params['document']
         # HTTP header `Accept`
         header_params['Accept'] = self.api_client.\
             select_header_accept(['application/json'])
+
+        header_params['Content-Type'] = 'application/octet-stream'
+        header_params['Content-Disposition'] =\
+            f"file; filename=\"{params['filename']}\";fileExtension={params['filename'].rsplit('.', 1)[-1]};documentId={params['document_id']}"
 
         # Authentication setting
         auth_settings = []
